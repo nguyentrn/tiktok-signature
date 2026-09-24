@@ -29,8 +29,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (production only)
-RUN npm ci --only=production
+# Dùng npm install thay vì npm ci để không bắt buộc có package-lock.json
+RUN npm install --omit=dev
 
 # Copy application files
 COPY server.mjs ./

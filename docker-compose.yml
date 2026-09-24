@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # 1. Cụm Signature Server (chạy ngầm bên trong, không mở port trực tiếp ra ngoài)
   signature-node:
