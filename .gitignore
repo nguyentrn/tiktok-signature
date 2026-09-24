@@ -215,3 +215,4 @@ docker-compose.override.yml
 .claude/
 # Persistent Chrome user-data dir created by puppeteer at runtime
 .chrome-profile/
+/repomix-output.xml
