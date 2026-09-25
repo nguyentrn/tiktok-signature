@@ -1,29 +1,57 @@
 services:
-  # 1. Cụm Signature Server (chạy ngầm bên trong, không mở port trực tiếp ra ngoài)
-  signature-node:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    shm_size: "1gb" # CỰC KỲ QUAN TRỌNG: Cấp đủ share memory để Chromium không crash
+  signature-node-1:
+    build: .
+    shm_size: "1gb"
     environment:
       - PORT=8080
-      - PROXY_ENABLED=${PROXY_ENABLED:-false}
-      - PROXY_HOST=${PROXY_HOST:-}
-      - PROXY_USER=${PROXY_USER:-}
-      - PROXY_PASS=${PROXY_PASS:-}
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          memory: 800M # Chống tràn RAM máy chủ
+          memory: 800M
 
-  # 2. Cổng tiếp nhận (Load Balancer)
+  signature-node-2:
+    build: .
+    shm_size: "1gb"
+    environment:
+      - PORT=8080
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 800M
+
+  signature-node-3:
+    build: .
+    shm_size: "1gb"
+    environment:
+      - PORT=8080
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 800M
+
+  signature-node-4:
+    build: .
+    shm_size: "1gb"
+    environment:
+      - PORT=8080
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 800M
+
   signature-gateway:
     image: nginx:alpine
     restart: unless-stopped
     ports:
-      - "8080:80" # Worker bên ngoài chỉ cần gọi vào cổng 8080 này
+      - "8080:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - signature-node
+      - signature-node-1
+      - signature-node-2
+      - signature-node-3
+      - signature-node-4
