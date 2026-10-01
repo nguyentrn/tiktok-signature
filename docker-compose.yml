@@ -7,7 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: tiktok-signature-node-1
-    shm_size: "1gb" # Cấp đủ share memory chống crash tab Chromium
+    init: true                      # <--- BẮT BUỘC: Docker tự dọn sạch 100% zombie process
+    shm_size: "1gb"
     ports:
       - "8081:8080"
     environment:
@@ -22,7 +23,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 850M
+          memory: 1500M             # Nâng lên 1.5GB để khi restart không bị nghẽn RAM ảo
+          pids: 4096
 
   # Node 2: Chromium Instance 2
   signature-node-2:
@@ -30,6 +32,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: tiktok-signature-node-2
+    init: true                      # <--- BẮT BUỘC
     shm_size: "1gb"
     ports:
       - "8082:8080"
@@ -45,7 +48,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 850M
+          memory: 1500M
+          pids: 4096
 
   # Node 3: Chromium Instance 3
   signature-node-3:
@@ -53,6 +57,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: tiktok-signature-node-3
+    init: true                      # <--- BẮT BUỘC
     shm_size: "1gb"
     ports:
       - "8083:8080"
@@ -68,4 +73,5 @@ services:
     deploy:
       resources:
         limits:
-          memory: 850M
+          memory: 1500M
+          pids: 4096
